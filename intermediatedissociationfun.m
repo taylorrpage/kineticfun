@@ -21,9 +21,9 @@ for i = 1:nTraces
     
     %Parse parameters
     %----------------
-    [aInt, aJump, kD, kQ, kB, kOn, kOff, c] = ...
+    [aInt, aJump, kD, kQ, kB, kOn, kOff] = ...
     deal(param(i, 1), param(i, 2), param(i, 3), param(i, 4), param(i, 5), ...
-         param(i, 6), param(i, 7), param(i, 8));
+         param(i, 6), param(i, 7));
 
 
     zntAdded = concentrations(i, 1);
