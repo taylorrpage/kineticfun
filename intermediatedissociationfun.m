@@ -20,16 +20,10 @@ function Y = intermediatedissociationfun(param, t, constants, concentrations)
 %
 %Inputs must all be vectors or all be arrays.
 
-paramSize          = size(param);
-tSize              = size(t);
-constantsSize      = size(constants);
-concentrationsSize = size(concentrations);
-
 nTraces = tSize(2);
 
 %Error if mismatched arrays
-validInputs = paramSize(1) == nTraces & constantsSize == nTraces & ...
-    concentrationsSize == nTraces;
+validInputs = checkRows(param, constans, concentrations, t');
 
 if ~validInputs
     error('Param rows, t cols, constants rows, and concentrations row must be equal')
