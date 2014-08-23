@@ -1,4 +1,24 @@
 function Y = intermediatedissociationfun(param, t, constants, concentrations)
+%Y = intermediatedissociationfun(param, t, constants, concentrations)
+%
+%Simulates intermediate data for a simple dissociation model including
+%dissociation of the intermediate, but with strictly slow exchange triplet decay.
+%
+%
+%param          = [aInt aJump kD kQ kB log(kOn) kOff]; Vector or array where
+%                 each row corresponds to one trace.
+%constants      = [log(Ka) phi]; Vector or array where each row corresponds to
+%                 one trace. Ka is the association constant in M-1. phi is the
+%                 quantum yield of triplet. This is necessary for determining
+%                 initial concentrations of the excited state species for second
+%                 order reactions.
+%concentrations = [zntAdded(uM) fe3Added(uM) fe2Added(uM)]; Vector or array
+%                 where each row corresponds to one trace. Concentrations must
+%                 be in micromolar.
+%t              - Vertical vector or array where each column corresponds to one 
+%                 trace.
+%
+%Inputs must all be vectors or all be arrays.
 
 paramSize          = size(param);
 tSize              = size(t);
@@ -7,6 +27,7 @@ concentrationsSize = size(concentrations);
 
 nTraces = tSize(2);
 
+%Error if mismatched arrays
 validInputs = paramSize(1) == nTraces & constantsSize == nTraces & ...
     concentrationsSize == nTraces;
 
@@ -65,10 +86,10 @@ for i = 1:nTraces
     Y(:, i) = y;
 end %for    
 
-    function dt = fun(~, y)
+    function dydt = fun(~, y)
         fe3 = fe3Added - y(2) - y(3) - y(4) - y(6);
         fe2 = fe2Added + y(3); 
-        dt = [  -(kD)*y(1);     ... %znt
+        dydt = [-(kD)*y(1);     ... %znt
                 -(kQ + kD)*y(2); ... %zntFe3
                 - kOn*fe2*y(3) + kOff*y(4);     ... %zni
                 -(kB + kOff)*y(4) + kOn*fe2*y(3) + kQ*y(2); ... %zniFe2
