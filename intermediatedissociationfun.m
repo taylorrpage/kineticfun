@@ -1,5 +1,5 @@
-function Y = intermediatedissociationfun(param, t, constants, concentrations)
-%Y = intermediatedissociationfun(param, t, constants, concentrations)
+function Y = intermediatedissociationfun(param, t, constants, concentrations, g)
+%Y = intermediatedissociationfun(param, t, constants, concentrations, g)
 %
 %Simulates intermediate data for a simple dissociation model including
 %dissociation of the intermediate, but with strictly slow exchange triplet decay.
@@ -15,15 +15,20 @@ function Y = intermediatedissociationfun(param, t, constants, concentrations)
 %concentrations = [zntAdded(uM) fe3Added(uM) fe2Added(uM)]; Vector or array
 %                 where each row corresponds to one trace. Concentrations must
 %                 be in micromolar.
+%g              - Vector or matrix with the same dimensions as param which
+%                 designates global parameters. A value of 0 indicates a unique
+%                 paramter. A value of 1 will copy the parameter value from row
+%                 1 of the same column.
 %t              - Vertical vector or array where each column corresponds to one 
 %                 trace.
 %
 %Inputs must all be vectors or all be arrays.
 
+tSize = size(t);
 nTraces = tSize(2);
 
 %Error if mismatched arrays
-validInputs = checkRows(param, constans, concentrations, t');
+validInputs = checkRows(param, constants, concentrations, t');
 
 if ~validInputs
     error('Param rows, t cols, constants rows, and concentrations row must be equal')
@@ -32,10 +37,14 @@ end %if
 
 Y = zeros(tSize);
 
+param(g == 1) = NaN;
+param = populateconstants(param); %Replace NaN for global parameters.
+    
 for i = 1:nTraces
     
     %Parse parameters
     %----------------
+
     [aInt, aJump, kD, kQ, kB, kOn, kOff] = ...
     deal(param(i, 1), param(i, 2), param(i, 3), param(i, 4), param(i, 5), ...
          param(i, 6), param(i, 7));
