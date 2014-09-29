@@ -1,6 +1,8 @@
 function Y = rdfun(param, t, constants, concentrations, g, extras)
 %Y = rdfun(param, t, constants, concentrations, g)
 %
+%REDUCED DISSOCIATION
+%
 %Simulates intermediate data for a simple dissociation model including
 %dissociation of the intermediate, but with strictly slow exchange triplet
 %decay. kB, kOn, and kOff are constrained.
@@ -9,7 +11,7 @@ function Y = rdfun(param, t, constants, concentrations, g, extras)
 %                 xformparam. Pre-vectorized parameters:
 %                 globalParam = [kbA; kbB; kbC; kbD; konA; konB; konC; konD; ...
 %                               koffM; koffB].
-%                 localParam  = [aTrip aInt aJump kD kQ c]
+%                 localParam  = [aTrip; aInt; aJump; kD; kQ; c]
 %t              - Vertical vector or array of time data where each column
 %                 corresponds to one trace.
 %constants      = [log(Ka) phi]; Vector or array where each row corresponds to

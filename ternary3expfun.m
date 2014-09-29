@@ -1,7 +1,7 @@
 function Y = ternary3expfun(param, t, concentrations, g, extras)
 %Y = ternary3expfun(param, t, g)
 
-nFixedP = extras(1);
+nFixedP = extras(1); %Fixed constants, K1, K2, k1, k2, k3
 nCols = extras(2);
 
 [param, fixedParam] = xformparam(param, nFixedP, nCols);
@@ -11,7 +11,7 @@ if ~validInputs
     error('Param rows and t cols not equal')
 end %if
 
-param(g == 1) = NaN;
+param(g == 1) = NaN; %Uses g to determine which parameters are global.
 param = populateconstants(param); %Replace NaN for global parameters.
 
 [~, nTraces] = size(t);
